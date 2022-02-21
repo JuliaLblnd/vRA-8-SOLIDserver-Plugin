@@ -100,11 +100,7 @@
             },
             {  
                "prop_key":"dnsServerAddresses",
-               "prop_value":""
-            },
-            {  
-               "prop_key":"dnsSearchDomains",
-               "prop_value":""
+               "prop_value":"1.1.1.1, 1.0.0.1"
             }
          ],
          "constraints":{
