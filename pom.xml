@@ -16,17 +16,17 @@ conditions of the subcomponent's license, as noted in the LICENSE file.
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.vmware.cas.ipam.adapter</groupId>
-    <artifactId>sample-ipam</artifactId>
+    <artifactId>solidserver-ipam</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
-        <provider.name>SampleIPAM</provider.name>
-        <provider.description>Sample IPAM integration for vRA</provider.description>
+        <provider.name>EfficientIP SOLIDserver</provider.name>
+        <provider.description>EfficientIP SOLIDserver IPAM integration for vRA 8</provider.description>
         <provider.version>0.1</provider.version>
 
         <provider.supportsAddressSpaces>false</provider.supportsAddressSpaces>
-        <provider.supportsUpdateRecord>true</provider.supportsUpdateRecord>
+        <provider.supportsUpdateRecord>false</provider.supportsUpdateRecord>
         <provider.supportsOnDemandNetworks>false</provider.supportsOnDemandNetworks>
 
         <user.id>1000</user.id>

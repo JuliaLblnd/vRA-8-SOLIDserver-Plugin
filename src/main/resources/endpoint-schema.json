@@ -2,8 +2,8 @@
    "layout":{
       "pages":[
          {
-            "id":"Sample IPAM",
-            "title":"Sample IPAM endpoint",
+            "id":"SOLIDserver",
+            "title":"EfficientIP SOLIDserver IPAM endpoint",
             "sections":[
                {
                   "id":"secion_1",
@@ -94,9 +94,17 @@
          },
          "placeholder":"",
          "default":[
-            {
-               "prop_key":"SampleIPAM.IPAM.fooConfigProperty",
-               "prop_value":"bar"
+            {  
+               "prop_key":"site_name",
+               "prop_value":""
+            },
+            {  
+               "prop_key":"dnsServerAddresses",
+               "prop_value":""
+            },
+            {  
+               "prop_key":"dnsSearchDomains",
+               "prop_value":""
             }
          ],
          "constraints":{
