@@ -7,6 +7,5 @@ vra_solidserver_utils
 """
 
 __author__ = 'Julia Leblond'
-__all__ = ["utils"]
 
-from . import utils
+from .utils import *
