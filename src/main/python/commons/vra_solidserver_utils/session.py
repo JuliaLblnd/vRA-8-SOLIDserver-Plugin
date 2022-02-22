@@ -2,7 +2,7 @@
 vra_solidserver_utils.session
 ~~~~~~~~~~~~~~~~
 
-EfficientIP SOLIDserver API Client
+EfficientIP SOLIDserver Requests Session handler
 
 :copyright: (c) 2021 by Julia Leblond.
 :license: CeCILL 2.1, see LICENSE for more details.

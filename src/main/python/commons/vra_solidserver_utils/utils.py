@@ -2,6 +2,10 @@
 vra_solidserver_utils.utils
 ~~~~~~~~~~~~~~~~
 
+EfficientIP SOLIDserver utils for vRA
+
+:copyright: (c) 2021 by Julia Leblond.
+:license: CeCILL 2.1, see LICENSE for more details.
 """
 
 import json
