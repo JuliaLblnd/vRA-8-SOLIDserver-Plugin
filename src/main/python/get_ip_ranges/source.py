@@ -13,8 +13,8 @@ import requests
 from vra_ipam_utils.ipam import IPAM
 import logging
 from urllib.parse import parse_qs
-from vra_solidserver_utils.auth import SOLIDserverAuth
-import vra_solidserver_utils as utils
+from vra_solidserver_utils import SOLIDserverSession
+from vra_solidserver_utils import utils
 
 def handler(context, inputs):
 
@@ -25,21 +25,20 @@ def handler(context, inputs):
 
 def do_get_ip_ranges(self, auth_credentials, cert):
 
+    hostname = self.inputs["endpoint"]["endpointProperties"]["hostName"]
     username = auth_credentials["privateKeyId"]
     password = auth_credentials["privateKey"]
-    auth = SOLIDserverAuth(username, password)
+    session = SOLIDserverSession(hostname, username, password, cert)
 
     properties = utils.get_properties(self.inputs)
+    site_name = properties.get('site_name')
 
     service = "/rest/ip_pool_list"
-    url = "https://" + self.inputs["endpoint"]["endpointProperties"]["hostName"] + service
-
-    site_name = properties.get('site_name')
     params = {}
     if site_name:
         params = {"WHERE": "site_name='{}'".format(site_name)}
 
-    response = requests.get(url, params=params, auth=auth, verify=cert)
+    response = session.get(service, params=params)
 
     result_ranges = []
 
@@ -61,7 +60,7 @@ def do_get_ip_ranges(self, auth_credentials, cert):
         vlan = subnet_class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]
         description = "VLAN ID: {}".format(vlan)
 
-        logging.info(f"Found pool {pool["pool_name"]} with ID {pool["pool_id"]}")
+        logging.info(f"Found pool {pool['pool_name']} with ID {pool['pool_id']}")
 
         range = {
             "id"                : rangeId,              # String, Required
@@ -83,7 +82,7 @@ def do_get_ip_ranges(self, auth_credentials, cert):
         logging.debug(range)
         result_ranges.append(range)
 
-    logging.info('Found {} IP ranges'.format(len(result_ranges)))
+    logging.info(f"Found {len(result_ranges)} IP ranges")
 
     result = {
         "ipRanges": result_ranges

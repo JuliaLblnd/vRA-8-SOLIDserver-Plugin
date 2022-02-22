@@ -12,7 +12,7 @@ conditions of the subcomponent's license, as noted in the LICENSE file.
 import requests
 from vra_ipam_utils.ipam import IPAM
 import logging
-from vra_solidserver_utils.auth import SOLIDserverAuth
+from vra_solidserver_utils import SOLIDserverSession
 
 """
 Example payload:
@@ -68,13 +68,11 @@ def handler(context, inputs):
 
 def do_deallocate_ip(self, auth_credentials, cert):
 
+    hostname = self.inputs["endpoint"]["endpointProperties"]["hostName"]
     username = auth_credentials["privateKeyId"]
     password = auth_credentials["privateKey"]
-
     global session
-    session = requests.Session()
-    session.auth = SOLIDserverAuth(username, password)
-    session.verify = cert
+    session = SOLIDserverSession(hostname, username, password, cert)
 
     deallocation_result = []
     for deallocation in self.inputs["ipDeallocations"]:
@@ -88,19 +86,16 @@ def do_deallocate_ip(self, auth_credentials, cert):
 def deallocate(resource, deallocation):
     ip_range_id = deallocation["ipRangeId"]
     site_id = ip_range_id.split("/")[0]
-    ip = deallocation["ipAddress"]
+    ipAddress = deallocation["ipAddress"]
 
-    logging.info(f"Deallocating ip {ip} from range {ip_range_id}")
+    logging.info(f"Deallocating IP address {ipAddress} from site {site_id}")
 
     service = "/rest/ip_delete"
-    url = "https://" + endpoint["endpointProperties"]["hostName"] + service
     params = {
         "site_id" : site_id,
-        "hostaddr" : ip
+        "hostaddr" : ipAddress
     }
-    for address in ipAddresses:
-        params["hostaddr"] = address
-        response = session.request("DELETE", url, params=params)
+    response = session.request("DELETE", service, params=params)
 
     return {
         "ipDeallocationId": deallocation["id"],

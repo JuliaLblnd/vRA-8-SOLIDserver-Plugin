@@ -13,7 +13,7 @@ import requests
 from vra_ipam_utils.ipam import IPAM
 from vra_ipam_utils.exceptions import InvalidCertificateException
 import logging
-from vra_solidserver_utils.auth import SOLIDserverAuth
+from vra_solidserver_utils import SOLIDserverSession
 
 def handler(context, inputs):
 
@@ -24,14 +24,15 @@ def handler(context, inputs):
 
 def do_validate_endpoint(self, auth_credentials, cert):
 
+    hostname = self.inputs["endpointProperties"]["hostName"]
     username = auth_credentials["privateKeyId"]
     password = auth_credentials["privateKey"]
-    auth = SOLIDserverAuth(username, password)
+    session = SOLIDserverSession(hostname, username, password, cert)
+
     service = "/rest/ip_address_count"
-    url = "https://" + self.inputs["endpointProperties"]["hostName"] + service
 
     try:
-        response = requests.get(url, verify=cert, auth=auth)
+        response = session.get(service)
 
         if response.status_code == 200:
             return {

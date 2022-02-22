@@ -17,7 +17,7 @@ class SOLIDserverSession(Session):
 	RPC_SERVICES = ['ip_find_free_address']
 
 	def __init__(self, hostname, login, password, cert):
-		super(SOLIDserver, self).__init__()
+		super(SOLIDserverSession, self).__init__()
 		self.base_url = 'https://' + hostname
 		self.headers = {'content-type': 'application/json', 'cache-control': 'no-cache'}
 		self.verify = cert
@@ -28,4 +28,4 @@ class SOLIDserverSession(Session):
 
 	def request(self, method, service, *args, **kwargs):
 		url = urljoin(self.base_url, service)
-		return super(SOLIDserver, self).request(method, url, *args, **kwargs)
+		return super(SOLIDserverSession, self).request(method, url, *args, **kwargs)

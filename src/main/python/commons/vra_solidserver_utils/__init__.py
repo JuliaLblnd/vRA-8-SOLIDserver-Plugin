@@ -8,4 +8,5 @@ vra_solidserver_utils
 
 __author__ = 'Julia Leblond'
 
-from .utils import *
+from . import utils
+from .session import SOLIDserverSession
