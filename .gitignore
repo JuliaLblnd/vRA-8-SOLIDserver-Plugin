@@ -41,6 +41,6 @@ tests
 # library not used
 src/main/python/commons/SOLIDserver
 # not implemented
-src/main/python/allocate_ip_range
-src/main/python/deallocate_ip_range
-src/main/python/update_record
+# src/main/python/allocate_ip_range
+# src/main/python/deallocate_ip_range
+# src/main/python/update_record
