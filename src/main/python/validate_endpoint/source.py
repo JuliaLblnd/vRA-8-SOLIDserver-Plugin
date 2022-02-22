@@ -27,8 +27,8 @@ def do_validate_endpoint(self, auth_credentials, cert):
     username = auth_credentials["privateKeyId"]
     password = auth_credentials["privateKey"]
     auth = SOLIDserverAuth(username, password)
-    service = "ip_address_count"
-    url = "https://" + self.inputs["endpointProperties"]["hostName"] + "/rest/" + service
+    service = "/rest/ip_address_count"
+    url = "https://" + self.inputs["endpointProperties"]["hostName"] + service
 
     try:
         response = requests.get(url, verify=cert, auth=auth)
