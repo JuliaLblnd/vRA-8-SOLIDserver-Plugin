@@ -146,6 +146,8 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     }
     response = session.request("OPTIONS", url, params=params)
 
+    logging.info(f"Allocated IP {hostaddr} to {resource["name"]} in pool {pool_id}")
+
     result = {
         "ipAllocationId": allocation["id"],
         "ipRangeId"     : range_id,

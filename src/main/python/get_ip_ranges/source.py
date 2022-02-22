@@ -61,7 +61,7 @@ def do_get_ip_ranges(self, auth_credentials, cert):
         vlan = subnet_class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]
         description = "VLAN ID: {}".format(vlan)
 
-        logging.debug('Found pool {}'.format(pool["pool_name"]))
+        logging.info(f"Found pool {pool["pool_name"]} with ID {pool["pool_id"]}")
 
         range = {
             "id"                : rangeId,              # String, Required
