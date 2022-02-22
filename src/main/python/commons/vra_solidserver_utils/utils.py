@@ -40,7 +40,7 @@ def subnet_size2prefix_length(subnet_size):
     while subnet_size > 1:
         prefix_length = prefix_length - 1
         subnet_size = subnet_size // 2
-    return prefix_length
+    return str(prefix_length)
 
 def get_properties(inputs):
     inputs = inputs.get("endpoint", inputs)
