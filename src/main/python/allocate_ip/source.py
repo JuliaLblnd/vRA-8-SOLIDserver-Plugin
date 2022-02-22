@@ -13,7 +13,6 @@ import requests
 from vra_ipam_utils.ipam import IPAM
 import logging
 from vra_solidserver_utils.auth import SOLIDserverAuth
-import vra_solidserver_utils as utils
 
 """
 Example payload
@@ -82,9 +81,6 @@ def do_allocate_ip(self, auth_credentials, cert):
 
     username = auth_credentials["privateKeyId"]
     password = auth_credentials["privateKey"]
-
-    global properties
-    properties = get_properties(self.inputs)
 
     global session
     session = requests.Session()
