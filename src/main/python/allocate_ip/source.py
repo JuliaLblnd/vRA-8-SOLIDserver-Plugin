@@ -12,6 +12,8 @@ conditions of the subcomponent's license, as noted in the LICENSE file.
 import requests
 from vra_ipam_utils.ipam import IPAM
 import logging
+from vra_solidserver_utils.auth import SOLIDserverAuth
+import vra_solidserver_utils as utils
 
 """
 Example payload
@@ -77,10 +79,18 @@ def handler(context, inputs):
     return ipam.allocate_ip()
 
 def do_allocate_ip(self, auth_credentials, cert):
-    # Your implemention goes here
 
     username = auth_credentials["privateKeyId"]
     password = auth_credentials["privateKey"]
+
+    global properties
+    properties = get_properties(self.inputs)
+
+    global session
+    session = requests.Session()
+    session.auth = SOLIDserverAuth(username, password)
+    session.verify = cert
+
     allocation_result = []
     try:
         resource = self.inputs["resourceInfo"]
@@ -117,27 +127,54 @@ def allocate(resource, allocation, context, endpoint):
 
 def allocate_in_range(range_id, resource, allocation, context, endpoint):
 
-    ## Plug your implementation here to allocate an ip address
-    ## ...
-    ## Allocation successful
+    range_id_parts = range_id.split("/")
+    site_id = range_id_parts[0]
+    pool_id = range_id_parts[1]
+
+    service = "/rpc/ip_find_free_address"
+    url = "https://" + endpoint["endpointProperties"]["hostName"] + service
+    params = {
+        "max_find" : 1,
+        "pool_id": pool_id
+    }
+    response = session.get(url, params=params)
+    response_json = response.json()[0]
+    hostaddr = response_json['hostaddr']
+
+    service = "/rest/ip_add"
+    url = "https://" + endpoint["endpointProperties"]["hostName"] + service
+    params = {
+        "site_id"  : site_id,
+        "name"     : resource["name"] + '.renater.fr',
+        "hostaddr" : hostaddr
+    }
+    response = session.request("OPTIONS", url, params=params)
 
     result = {
         "ipAllocationId": allocation["id"],
-        "ipRangeId": range_id,
-        "ipVersion": "IPv4"
+        "ipRangeId"     : range_id,
+        "ipVersion"     : "IPv4",
+        "ipAddresses"   : [hostaddr],
+        "__site_id"     : site_id
     }
-
-    result["ipAddresses"] = ["10.23.117.5"]
-    result["properties"] = {"customPropertyKey1": "customPropertyValue1"}
 
     return result
 
 ## Rollback any previously allocated addresses in case this allocation request contains multiple ones and failed in the middle
-def rollback(allocation_result):
+def rollback(allocation_result, endpoint):
     for allocation in reversed(allocation_result):
         logging.info(f"Rolling back allocation {str(allocation)}")
         ipAddresses = allocation.get("ipAddresses", None)
 
         ## release the address
+
+        service = "/rest/ip_delete"
+        url = "https://" + endpoint["endpointProperties"]["hostName"] + service
+        params = {
+            "site_id" : allocation["__site_id"]
+        }
+        for address in ipAddresses:
+            params["hostaddr"] = address
+            response = session.request("DELETE", url, params=params)
 
     return
