@@ -12,15 +12,6 @@ import json
 from socket import inet_ntoa, inet_aton
 from struct import pack, unpack
 
-def long2ip(longip):
-    if longip <= 4294967295 and longip >=0:
-        return inet_ntoa(pack("!L", longip))
-    else:
-        return False
-
-def ip2long(ip):
-    return unpack("!L", inet_aton(ip))[0]
-
 def hex2ip(hex_ip):
     return "{}.{}.{}.{}".format(
         int(hex_ip[0] + hex_ip[1], 16),
@@ -55,14 +46,3 @@ def get_properties(inputs):
         properties[prop["prop_key"]] = prop["prop_value"]
 
     return properties
-
-def build_params(filters):
-    where = ""
-    where_list = []
-    for filter in filters:
-        if not where:
-            where = where + filter + ""
-
-        where = where + " and "
-
-    params = {"WHERE": where}
