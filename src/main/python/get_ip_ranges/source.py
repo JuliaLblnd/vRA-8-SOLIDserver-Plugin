@@ -47,8 +47,6 @@ def do_get_ip_ranges(self, auth_credentials, cert):
         subnet_class_parameters = parse_qs(pool['subnet_class_parameters'])
 
         rangeId = "{}/{}".format(pool["site_id"], pool["pool_id"])
-        # startIPAddress     = utils.long2ip(int(pool["start_ip_addr"], 16))
-        # endIPAddress       = utils.long2ip(int(pool["end_ip_addr"], 16))
         startIPAddress     = utils.hex2ip(pool["start_ip_addr"])
         endIPAddress       = utils.hex2ip(pool["end_ip_addr"])
         subnetPrefixLength = utils.subnet_size2prefix_length(pool["subnet_size"])
