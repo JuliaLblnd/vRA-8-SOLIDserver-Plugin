@@ -47,6 +47,7 @@ def do_get_ip_ranges(self, auth_credentials, cert):
 
         subnet_class_parameters = parse_qs(pool['subnet_class_parameters'])
 
+        rangeId = "{}/{}".format(pool["site_id"], pool["pool_id"])
         # startIPAddress     = utils.long2ip(int(pool["start_ip_addr"], 16))
         # endIPAddress       = utils.long2ip(int(pool["end_ip_addr"], 16))
         startIPAddress     = utils.hex2ip(pool["start_ip_addr"])
@@ -58,13 +59,12 @@ def do_get_ip_ranges(self, auth_credentials, cert):
         dnsServerAddresses = properties.get('dnsServerAddresses', "").replace(" ", "").replace(",", ";").split(";")
 
         vlan = subnet_class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]
-
         description = "VLAN ID: {}".format(vlan)
 
         logging.debug('Found pool {}'.format(pool["pool_name"]))
 
         range = {
-            "id"                : pool["pool_id"],      # String, Required
+            "id"                : rangeId,              # String, Required
             "name"              : pool["pool_name"],    # String, Required
             "description"       : description,          # String, Optional
             "startIPAddress"    : startIPAddress,       # String, Required
