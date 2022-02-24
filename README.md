@@ -5,17 +5,20 @@ A plugin to integrate [EfficientIP's SOLIDserver](https://www.efficientip.com/pr
 
 ![Screenshot](./screenshot.png)
 
-## Installation
+Installation
+------------
 
  - Add a new IPAM Integration in vRealize Automation
  - Upload the latest [Release](https://github.com/JuliaLblnd/vRA-8-SOLIDserver-Plugin/releases) to IPAM Providers
  - Provide the **Username**, **Password**, and **Hostname** of your SOLIDserver Appliances
 
-## Usage
+Usage
+-----
 
 You must create IP *pools* in SOLIDserver IPAM.
 
-## Additional Configuration Properties
+Additional Configuration Properties
+-----------------------------------
 
 ### `dnsServerAddresses` :
 
@@ -28,3 +31,8 @@ Comma separated IPv4, not mandatory
 SOLIDserver IPAM *Space* name
 
 Not mandatory
+
+License
+-------
+
+This project is licensed under [CeCILL](https://cecill.info/) license - see the [LICENSE](./LICENSE) file for details
