@@ -2,7 +2,7 @@
    "layout":{
       "pages":[
          {
-            "id":"SOLIDserver",
+            "id":"page_1",
             "title":"EfficientIP SOLIDserver IPAM endpoint",
             "sections":[
                {
@@ -22,14 +22,7 @@
                      },
                      {
                         "id":"properties",
-                        "display":"datagrid",
-                        "state":{
-                           "visible":true,
-                           "read-only":false,
-                           "hidden-fields":[
-
-                           ]
-                        }
+                        "display":"datagrid"
                      }
                   ]
                }
@@ -43,15 +36,16 @@
             "dataType":"string"
          },
          "label":"Username",
+         "placeholder": "automation",
          "constraints":{
             "required":true
          }
       },
       "privateKey":{
-         "label":"Password",
          "type":{
             "dataType":"secureString"
          },
+         "label":"Password",
          "constraints":{
             "required":true
          }
@@ -61,11 +55,13 @@
             "dataType":"string"
          },
          "label":"Hostname",
+         "placeholder": "ns0.example.com",
          "constraints":{
             "required":true
          }
       },
       "properties":{
+         "label":"Properties",
          "type":{
             "dataType":"complex",
             "isMultiple":true,
@@ -75,9 +71,6 @@
                   "id":"prop_key",
                   "type":{
                      "dataType":"string"
-                  },
-                  "constraints":{
-
                   }
                },
                {
@@ -85,27 +78,20 @@
                   "id":"prop_value",
                   "type":{
                      "dataType":"string"
-                  },
-                  "constraints":{
-
                   }
                }
             ]
          },
-         "placeholder":"",
          "default":[
-            {  
-               "prop_key":"site_name",
-               "prop_value":""
-            },
             {  
                "prop_key":"dnsServerAddresses",
                "prop_value":"1.1.1.1, 1.0.0.1"
+            },
+            {  
+               "prop_key":"site_name",
+               "prop_value":""
             }
-         ],
-         "constraints":{
-
-         }
+         ]
       }
    },
    "options":{
