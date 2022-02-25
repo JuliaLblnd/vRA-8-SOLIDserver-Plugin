@@ -46,3 +46,6 @@ def get_properties(inputs):
         properties[prop["prop_key"]] = prop["prop_value"]
 
     return properties
+
+def parse_list(strlist):
+    return strlist.replace(" ", "").replace(",", ";").split(";")

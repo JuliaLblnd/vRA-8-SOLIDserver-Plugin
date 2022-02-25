@@ -55,7 +55,7 @@ def do_get_ip_ranges(self, auth_credentials, cert):
         subnetPrefixLength = utils.subnet_size2prefix_length(pool["subnet_size"])
         gatewayAddress     = subnet_class_parameters.get('gateway', [None])[0]
         dnsSearchDomains   = subnet_class_parameters.get('domain_list', [None])[0].split(";")
-        dnsServerAddresses = properties.get('dnsServerAddresses', "").replace(" ", "").replace(",", ";").split(";")
+        dnsServerAddresses = utils.parse_list(properties.get('dnsServerAddresses', ""))
 
         vlan = subnet_class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]
         description = "VLAN ID: {}".format(vlan)
