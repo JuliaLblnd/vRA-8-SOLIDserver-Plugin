@@ -48,13 +48,13 @@ def do_get_ip_ranges(self, auth_credentials, cert):
 
         subnet_class_parameters = parse_qs(pool['subnet_class_parameters'])
 
-        rangeId = "{}/{}".format(pool["site_id"], pool["pool_id"])
+        domain             = subnet_class_parameters.get('domain', [None])[0]
+        rangeId            = "site:{}/pool:{}/domain:{}".format(pool["site_id"], pool["pool_id"], domain)
         startIPAddress     = utils.hex2ip(pool["start_ip_addr"])
         endIPAddress       = utils.hex2ip(pool["end_ip_addr"])
         subnetPrefixLength = utils.subnet_size2prefix_length(pool["subnet_size"])
         gatewayAddress     = subnet_class_parameters.get('gateway', [None])[0]
         dnsSearchDomains   = subnet_class_parameters.get('domain_list', [None])[0].split(";")
-        domain             = subnet_class_parameters.get('domain', [None])[0]
         dnsServerAddresses = properties.get('dnsServerAddresses', "").replace(" ", "").replace(",", ";").split(";")
 
         vlan = subnet_class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]

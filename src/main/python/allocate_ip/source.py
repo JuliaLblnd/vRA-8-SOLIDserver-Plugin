@@ -68,8 +68,9 @@ def allocate(resource, allocation, context, endpoint):
 def allocate_in_range(range_id, resource, allocation, context, endpoint):
 
     range_id_parts = range_id.split("/")
-    site_id = range_id_parts[0]
-    pool_id = range_id_parts[1]
+    site_id = range_id_parts[0].split(":", 1)[1]
+    pool_id = range_id_parts[1].split(":", 1)[1]
+    domain  = range_id_parts[3].split(":", 1)[1]
 
     service = "/rpc/ip_find_free_address"
     params = {
@@ -83,7 +84,7 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     service = "/rest/ip_add"
     params = {
         "site_id"  : site_id,
-        "name"     : resource["name"] + '.renater.fr',
+        "name"     : resource["name"] + domain,
         "hostaddr" : hostaddr
     }
     response = session.request("POST", service, params=params)

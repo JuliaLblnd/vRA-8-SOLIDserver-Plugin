@@ -42,7 +42,7 @@ def do_deallocate_ip(self, auth_credentials, cert):
 
 def deallocate(resource, deallocation):
     ip_range_id = deallocation["ipRangeId"]
-    site_id = ip_range_id.split("/")[0]
+    site_id = ip_range_id.split("/")[0].split(":", 1)[1]
     ipAddress = deallocation["ipAddress"]
 
     logging.info(f"Deallocating IP address {ipAddress} from site {site_id}")
