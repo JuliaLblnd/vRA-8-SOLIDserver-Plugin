@@ -67,6 +67,9 @@ def allocate(resource, allocation, context, endpoint):
 
 def allocate_in_range(range_id, resource, allocation, context, endpoint):
 
+    if int(allocation["size"]) != 1:
+        raise Exception("Not implemented")
+
     range_id_parts = range_id.split("/")
     site_id   = range_id_parts[0].split(":", 1)[1]
     subnet_id = range_id_parts[1].split(":", 1)[1]
@@ -84,6 +87,9 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
 
     free_ip_response = session.get(service, params=params)
     free_ips = free_ip_response.json()
+    if len(free_ips) < 1:
+        logging.error(free_ip_response.text)
+        raise Exception("No ip found in range")
     hostaddr = free_ips[0]['hostaddr']
 
     # Get domain of subnet
