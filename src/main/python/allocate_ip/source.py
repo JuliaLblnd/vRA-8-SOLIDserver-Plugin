@@ -68,27 +68,32 @@ def allocate(resource, allocation, context, endpoint):
 def allocate_in_range(range_id, resource, allocation, context, endpoint):
 
     range_id_parts = range_id.split("/")
-    site_id = range_id_parts[0].split(":", 1)[1]
-    pool_id = range_id_parts[1].split(":", 1)[1]
+    site_id   = range_id_parts[0].split(":", 1)[1]
+    subnet_id = range_id_parts[1].split(":", 1)[1]
+    is_pool   = "/pool:" in range_id
 
-    # Get 1 free ip in pool
+    # Get 1 free ip in pool or subnet
     service = "/rpc/ip_find_free_address"
     params = {
-        "max_find" : 1,
-        "pool_id": pool_id
+        "max_find" : 1
     }
-    response = session.get(service, params=params)
-    response_json = response.json()[0]
-    hostaddr = response_json['hostaddr']
+    if is_pool:
+        params["pool_id"] = range_id_parts[2].split(":", 1)[1]
+    else:
+        params["subnet_id"] = subnet_id
 
-    # Get domain of pool
-    service = "/rest/ip_pool_info"
+    free_ip_response = session.get(service, params=params)
+    free_ips = free_ip_response.json()
+    hostaddr = free_ips[0]['hostaddr']
+
+    # Get domain of subnet
+    service = "/rest/ip_block_subnet_info"
     params = {
-        "pool_id": pool_id
+        "subnet_id": subnet_id
     }
     response = session.get(service, params=params)
-    pool = response.json()[0]
-    class_parameters = utils.parse_class_parameters(pool['subnet_class_parameters'])
+    subnet = response.json()[0]
+    class_parameters = utils.parse_class_parameters(subnet['subnet_class_parameters'])
     domain = class_parameters.get('domain', [None])[0]
 
     # Allocate IP
@@ -100,7 +105,7 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     }
     response = session.request("POST", service, params=params)
 
-    logging.info(f"Allocated IP address {hostaddr} to {resource['name']} in pool {pool_id}")
+    logging.info(f"Allocated IP address {hostaddr} to {resource['name']} in subnet {subnet_id}")
     logging.info(response.text)
 
     result = {
