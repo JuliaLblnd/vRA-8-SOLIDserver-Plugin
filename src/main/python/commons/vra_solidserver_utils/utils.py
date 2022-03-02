@@ -8,9 +8,8 @@ EfficientIP SOLIDserver utils for vRA
 :license: CeCILL 2.1, see LICENSE for more details.
 """
 
-import json
-from socket import inet_ntoa, inet_aton
-from struct import pack, unpack
+import json.loads
+from urllib.parse import parse_qs
 
 def hex2ip(hex_ip):
     return "{}.{}.{}.{}".format(
@@ -49,3 +48,6 @@ def get_properties(inputs):
 
 def parse_list(strlist):
     return strlist.replace(" ", "").replace(",", ";").split(";")
+
+def parse_class_parameters(class_parameters):
+    return parse_qs(class_parameters)

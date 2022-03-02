@@ -14,7 +14,6 @@ Implementation for EfficientIP SOLIDServer by Julia Leblond (JuliaLblnd)
 import requests
 from vra_ipam_utils.ipam import IPAM
 import logging
-from urllib.parse import parse_qs
 from vra_solidserver_utils import SOLIDserverSession
 from vra_solidserver_utils import utils
 
@@ -46,18 +45,18 @@ def do_get_ip_ranges(self, auth_credentials, cert):
 
     for pool in response.json():
 
-        subnet_class_parameters = parse_qs(pool['subnet_class_parameters'])
+        class_parameters = utils.parse_class_parameters(pool['subnet_class_parameters'])
 
-        domain             = subnet_class_parameters.get('domain', [None])[0]
+        domain             = class_parameters.get('domain', [None])[0]
         rangeId            = "site:{}/pool:{}/domain:{}".format(pool["site_id"], pool["pool_id"], domain)
         startIPAddress     = utils.hex2ip(pool["start_ip_addr"])
         endIPAddress       = utils.hex2ip(pool["end_ip_addr"])
         subnetPrefixLength = utils.subnet_size2prefix_length(pool["subnet_size"])
-        gatewayAddress     = subnet_class_parameters.get('gateway', [None])[0]
-        dnsSearchDomains   = subnet_class_parameters.get('domain_list', [None])[0].split(";")
+        gatewayAddress     = class_parameters.get('gateway', [None])[0]
+        dnsSearchDomains   = class_parameters.get('domain_list', [None])[0].split(";")
         dnsServerAddresses = utils.parse_list(properties.get('dnsServerAddresses', ""))
 
-        vlan = subnet_class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]
+        vlan = class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]
         description = "VLAN ID: {}".format(vlan)
 
         logging.info(f"Found pool {pool['pool_name']} with ID {pool['pool_id']}")
