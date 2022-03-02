@@ -88,7 +88,19 @@
                "prop_value":"1.1.1.1, 1.0.0.1"
             },
             {  
-               "prop_key":"site_name",
+               "prop_key":"use_pool",
+               "prop_value":"True"
+            },
+            {  
+               "prop_key":"pool_site_name",
+               "prop_value":""
+            },
+            {  
+               "prop_key":"use_subnet",
+               "prop_value":"False"
+            },
+            {  
+               "prop_key":"subnet_site_name",
                "prop_value":""
             }
          ]

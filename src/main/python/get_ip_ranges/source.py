@@ -32,38 +32,87 @@ def do_get_ip_ranges(self, auth_credentials, cert):
     session = SOLIDserverSession(hostname, username, password, cert)
 
     properties = utils.get_properties(self.inputs)
-    site_name = properties.get('site_name')
+    use_pool   = properties.get('use_pool').lower() == "true"
+    use_subnet = properties.get('use_subnet').lower() == "true"
+    pool_site_name = properties.get('pool_site_name', '')
+    subnet_site_name = properties.get('subnet_site_name', '')
 
+    result_ranges = []
+
+    if use_pool:
+        pools = get_pools(pool_site_name)
+        ranges_from_pools = convert_pools_or_subnets(pools)
+        result_ranges.extend(ranges_from_pools)
+        logging.info(f"Found {len(ranges_from_pools)} IP ranges from pools")
+
+    if use_subnet:
+        subnets = get_subnets(subnet_site_name)
+        ranges_from_subnets = convert_pools_or_subnets(subnets)
+        result_ranges.extend(ranges_from_subnets)
+        logging.info(f"Found {len(ranges_from_subnets)} IP ranges from subnets")
+
+    result = {
+        "ipRanges": result_ranges
+    }
+
+    return result
+
+
+def get_pools(site_name=""):
     service = "/rest/ip_pool_list"
     params = {}
     if site_name:
         params = {"WHERE": "site_name='{}'".format(site_name)}
 
     response = session.get(service, params=params)
+    pools = response.json()
+    return pools
 
+
+def get_subnets(site_name=""):
+    service = "/rest/ip_block_subnet_list"
+    params = {}
+    if site_name:
+        params = {"WHERE": "site_name='{}'".format(site_name)}
+
+    response = session.get(service, params=params)
+    subnets = response.json()
+    return subnets
+
+
+def convert_pools_or_subnets(pools_or_subnets):
     result_ranges = []
 
-    for pool in response.json():
+    for element in pools_or_subnets:
+        class_parameters = utils.parse_class_parameters(element['subnet_class_parameters'])
 
-        class_parameters = utils.parse_class_parameters(pool['subnet_class_parameters'])
+        # if key pool_name is present, it is a pool
+        if "pool_name" in element:
+            rangeId = "site:{}/pool:{}".format(element["site_id"], element["pool_id"], domain)
+            name = element["pool_name"]
+            vlan = class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]
+            description = "VLAN ID: {}".format(vlan)
+            logging.info(f"Found pool {element['pool_name']} with ID {element['pool_id']}")
+
+        # else, it is a block_subnet
+        else:
+            rangeId = "site:{}/subnet:{}".format(element["site_id"], element["subnet_id"], domain)
+            name = element["subnet_name"]
+            description = "VLAN {}, {}".format(element["vlmvlan_vlan_id"], subnet["vlmvlan_name"])
+            logging.info(f"Found subnet {element['subnet_name']} with ID {element['subnet_id']}")
+
 
         domain             = class_parameters.get('domain', [None])[0]
-        rangeId            = "site:{}/pool:{}/domain:{}".format(pool["site_id"], pool["pool_id"], domain)
-        startIPAddress     = utils.hex2ip(pool["start_ip_addr"])
-        endIPAddress       = utils.hex2ip(pool["end_ip_addr"])
-        subnetPrefixLength = utils.subnet_size2prefix_length(pool["subnet_size"])
+        startIPAddress     = utils.hex2ip(element["start_ip_addr"])
+        endIPAddress       = utils.hex2ip(element["end_ip_addr"])
+        subnetPrefixLength = utils.subnet_size2prefix_length(element["subnet_size"])
         gatewayAddress     = class_parameters.get('gateway', [None])[0]
         dnsSearchDomains   = class_parameters.get('domain_list', [None])[0].split(";")
         dnsServerAddresses = utils.parse_list(properties.get('dnsServerAddresses', ""))
 
-        vlan = class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]
-        description = "VLAN ID: {}".format(vlan)
-
-        logging.info(f"Found pool {pool['pool_name']} with ID {pool['pool_id']}")
-
         range = {
             "id"                : rangeId,              # String, Required
-            "name"              : pool["pool_name"],    # String, Required
+            "name"              : name,                 # String, Required
             "description"       : description,          # String, Optional
             "startIPAddress"    : startIPAddress,       # String, Required
             "endIPAddress"      : endIPAddress,         # String, Required
@@ -78,13 +127,6 @@ def do_get_ip_ranges(self, auth_credentials, cert):
             # "tags"              : tags                  # List<Tag>
         }
 
-        logging.debug(range)
         result_ranges.append(range)
 
-    logging.info(f"Found {len(result_ranges)} IP ranges")
-
-    result = {
-        "ipRanges": result_ranges
-    }
-
-    return result
+    return result_ranges
