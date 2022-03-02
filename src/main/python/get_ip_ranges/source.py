@@ -88,7 +88,7 @@ def convert_pools_or_subnets(pools_or_subnets):
 
         # if key pool_name is present, it is a pool
         if "pool_name" in element:
-            rangeId = "site:{}/pool:{}".format(element["site_id"], element["pool_id"], domain)
+            rangeId = "site:{}/subnet:{}/pool:{}".format(element["site_id"], element["subnet_id"], element["pool_id"])
             name = element["pool_name"]
             vlan = class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]
             description = "VLAN ID: {}".format(vlan)
@@ -96,7 +96,7 @@ def convert_pools_or_subnets(pools_or_subnets):
 
         # else, it is a block_subnet
         else:
-            rangeId = "site:{}/subnet:{}".format(element["site_id"], element["subnet_id"], domain)
+            rangeId = "site:{}/subnet:{}".format(element["site_id"], element["subnet_id"])
             name = element["subnet_name"]
             description = "VLAN {}, {}".format(element["vlmvlan_vlan_id"], subnet["vlmvlan_name"])
             logging.info(f"Found subnet {element['subnet_name']} with ID {element['subnet_id']}")
