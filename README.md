@@ -26,9 +26,23 @@ DNS servers added to the network ranges.
 
 Comma separated IPv4, not mandatory
 
-### `site_name` :
+### `use_pool`
 
-SOLIDserver IPAM *Space* name
+`True` or `False`
+
+### `pool_site_name`
+
+IPAM *Space* name to search pools in
+
+Not mandatory
+
+### `use_subnet`
+
+`True` or `False`
+
+### `subnet_site_name`
+
+IPAM *Space* name to search subnets in
 
 Not mandatory
 
