@@ -71,6 +71,7 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     site_id = range_id_parts[0].split(":", 1)[1]
     pool_id = range_id_parts[1].split(":", 1)[1]
 
+    # Get 1 free ip in pool
     service = "/rpc/ip_find_free_address"
     params = {
         "max_find" : 1,
@@ -80,6 +81,7 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     response_json = response.json()[0]
     hostaddr = response_json['hostaddr']
 
+    # Get domain of pool
     service = "/rest/ip_pool_info"
     params = {
         "pool_id": pool_id
@@ -89,6 +91,7 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     class_parameters = utils.parse_class_parameters(pool['subnet_class_parameters'])
     domain = class_parameters.get('domain', [None])[0]
 
+    # Allocate IP
     service = "/rest/ip_add"
     params = {
         "site_id"  : site_id,
