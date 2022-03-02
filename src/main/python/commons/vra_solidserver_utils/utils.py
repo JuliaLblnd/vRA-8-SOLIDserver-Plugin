@@ -8,7 +8,7 @@ EfficientIP SOLIDserver utils for vRA
 :license: CeCILL 2.1, see LICENSE for more details.
 """
 
-import json.loads
+from json import loads as json_loads
 from urllib.parse import parse_qs
 
 def hex2ip(hex_ip):
@@ -39,7 +39,7 @@ def subnet_size2prefix_length(subnet_size):
 def get_properties(inputs):
     inputs = inputs.get("endpoint", inputs)
     properties_list = inputs["endpointProperties"].get("properties", [])
-    properties_list = json.loads(properties_list)
+    properties_list = json_loads(properties_list)
     properties = {}
     for prop in properties_list:
         properties[prop["prop_key"]] = prop["prop_value"]
