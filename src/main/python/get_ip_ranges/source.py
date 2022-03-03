@@ -40,14 +40,28 @@ def do_get_ip_ranges(self, auth_credentials, cert):
     result_ranges = []
 
     if use_pool:
-        pools = get_pools(pool_site_name)
+        service = "/rest/ip_pool_list"
+        params = {}
+        if pool_site_name:
+            params = {"WHERE": "site_name='{}'".format(pool_site_name)}
+
+        response = session.get(service, params=params)
+        pools = response.json()
         ranges_from_pools = convert_pools_or_subnets(pools)
+
         result_ranges.extend(ranges_from_pools)
         logging.info(f"Found {len(ranges_from_pools)} IP ranges from pools")
 
     if use_subnet:
-        subnets = get_subnets(subnet_site_name)
+        service = "/rest/ip_block_subnet_list"
+        params = {}
+        if subnet_site_name:
+            params = {"WHERE": "site_name='{}'".format(subnet_site_name)}
+
+        response = session.get(service, params=params)
+        subnets = response.json()
         ranges_from_subnets = convert_pools_or_subnets(subnets)
+
         result_ranges.extend(ranges_from_subnets)
         logging.info(f"Found {len(ranges_from_subnets)} IP ranges from subnets")
 
@@ -56,28 +70,6 @@ def do_get_ip_ranges(self, auth_credentials, cert):
     }
 
     return result
-
-
-def get_pools(site_name=""):
-    service = "/rest/ip_pool_list"
-    params = {}
-    if site_name:
-        params = {"WHERE": "site_name='{}'".format(site_name)}
-
-    response = session.get(service, params=params)
-    pools = response.json()
-    return pools
-
-
-def get_subnets(site_name=""):
-    service = "/rest/ip_block_subnet_list"
-    params = {}
-    if site_name:
-        params = {"WHERE": "site_name='{}'".format(site_name)}
-
-    response = session.get(service, params=params)
-    subnets = response.json()
-    return subnets
 
 
 def convert_pools_or_subnets(pools_or_subnets):
