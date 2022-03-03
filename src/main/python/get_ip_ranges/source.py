@@ -100,7 +100,7 @@ def convert_pools_or_subnets(pools_or_subnets):
         endIPAddress       = utils.hex2ip(element["end_ip_addr"])
         subnetPrefixLength = utils.subnet_size2prefix_length(element["subnet_size"])
         gatewayAddress     = class_parameters.get('gateway', [None])[0]
-        dnsSearchDomains   = class_parameters.get('domain_list', [None])[0].split(";")
+        dnsSearchDomains   = class_parameters.get('domain_list', [""])[0].split(";")
         dnsServerAddresses = utils.parse_list(properties.get('dnsServerAddresses', ""))
 
         range = {
