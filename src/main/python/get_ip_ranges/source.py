@@ -91,7 +91,7 @@ def convert_pools_or_subnets(pools_or_subnets):
         else:
             rangeId = "site:{}/subnet:{}".format(element["site_id"], element["subnet_id"])
             name = element["subnet_name"]
-            description = "VLAN {}, {}".format(element["vlmvlan_vlan_id"], subnet["vlmvlan_name"])
+            description = "VLAN {}, {}".format(element["vlmvlan_vlan_id"], element["vlmvlan_name"])
             logging.info(f"Found subnet {element['subnet_name']} with ID {element['subnet_id']}")
 
 
