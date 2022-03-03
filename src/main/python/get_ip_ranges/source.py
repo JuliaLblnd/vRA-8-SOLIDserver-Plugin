@@ -31,6 +31,7 @@ def do_get_ip_ranges(self, auth_credentials, cert):
     password = auth_credentials["privateKey"]
     session = SOLIDserverSession(hostname, username, password, cert)
 
+    global properties
     properties = utils.get_properties(self.inputs)
     use_pool   = properties.get('use_pool').lower() == "true"
     use_subnet = properties.get('use_subnet').lower() == "true"
