@@ -9,7 +9,7 @@ Installation
 ------------
 
  - Add a new IPAM Integration in vRealize Automation
- - Upload the latest [Release](https://github.com/JuliaLblnd/vRA-8-SOLIDserver-Plugin/releases) to IPAM Providers
+ - Upload the [latest release](https://github.com/JuliaLblnd/vRA-8-SOLIDserver-Plugin/releases/latest) to IPAM Providers
  - Provide the **Username**, **Password**, and **Hostname** of your SOLIDserver Appliances
 
 Usage
