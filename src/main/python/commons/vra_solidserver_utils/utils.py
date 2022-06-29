@@ -51,3 +51,17 @@ def parse_list(strlist):
 
 def parse_class_parameters(class_parameters):
     return parse_qs(class_parameters)
+
+def parse_tags(tags_str):
+    if len(tags_str) < 1:
+        return []
+    tags_str_list = parse_list(tags_str)
+    tags = []
+    for tag_str in tags_str_list:
+        new_tag = {}
+        tag = tag_str.split(":")
+        new_tag["key"] = tag[0]
+        if len(tag) == 2:
+            new_tag["value"] = tag[1]
+        tags.append(new_tag)
+    return tags
