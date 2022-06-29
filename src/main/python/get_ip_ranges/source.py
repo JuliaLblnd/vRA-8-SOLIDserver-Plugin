@@ -102,6 +102,7 @@ def convert_pools_or_subnets(pools_or_subnets):
         gatewayAddress     = class_parameters.get('gateway', [None])[0]
         dnsSearchDomains   = class_parameters.get('domain_list', [""])[0].split(";")
         dnsServerAddresses = utils.parse_list(properties.get('dnsServerAddresses', ""))
+        tags               = utils.parse_tags(class_parameters.get('vra_tags', [""])[0])
 
         range = {
             "id"                : rangeId,              # String, Required
@@ -117,7 +118,7 @@ def convert_pools_or_subnets(pools_or_subnets):
             "domain"            : domain,               # String, Optional
             "dnsSearchDomains"  : dnsSearchDomains,     # List<String>, Optional
             "properties"        : {},                   # Map<String,String>
-            # "tags"              : tags                  # List<Tag>
+            "tags"              : tags                  # List<Tag>
         }
 
         result_ranges.append(range)
