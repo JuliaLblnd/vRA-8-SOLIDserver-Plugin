@@ -1,4 +1,5 @@
-target
+target/*
+!target/.gitkeep
 .idea
 .settings
 .project
