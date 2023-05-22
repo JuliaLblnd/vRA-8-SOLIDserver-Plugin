@@ -46,7 +46,7 @@ def do_get_ip_ranges(self, auth_credentials, cert):
         if pool_site_name:
             params = {"WHERE": "site_name='{}'".format(pool_site_name)}
 
-        response = session.get(service, params=params)
+        response = session.request("GET", service, params=params)
         pools = response.json()
         ranges_from_pools = convert_pools_or_subnets(pools)
 
@@ -59,7 +59,7 @@ def do_get_ip_ranges(self, auth_credentials, cert):
         if subnet_site_name:
             params = {"WHERE": "site_name='{}'".format(subnet_site_name)}
 
-        response = session.get(service, params=params)
+        response = session.request("GET", service, params=params)
         subnets = response.json()
         ranges_from_subnets = convert_pools_or_subnets(subnets)
 

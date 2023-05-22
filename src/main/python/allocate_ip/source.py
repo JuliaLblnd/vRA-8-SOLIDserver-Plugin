@@ -76,6 +76,16 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     subnet_id = range_id_parts[1].split(":", 1)[1]
     is_pool   = "/pool:" in range_id
 
+    # Get domain of subnet
+    service = "/rest/ip_block_subnet_info"
+    params = {
+        "subnet_id": subnet_id
+    }
+    response = session.request("GET", service, params=params)
+    subnet = response.json()[0]
+    class_parameters = utils.parse_class_parameters(subnet['subnet_class_parameters'])
+    domain = class_parameters.get('domain', [None])[0]
+
     # Get 1 free ip in pool or subnet
     service = "/rpc/ip_find_free_address"
     params = {
@@ -86,22 +96,12 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     else:
         params["subnet_id"] = subnet_id
 
-    free_ip_response = session.get(service, params=params)
+    free_ip_response = session.request("GET", service, params=params)
     free_ips = free_ip_response.json()
     if len(free_ips) < 1:
         logging.error(free_ip_response.text)
         raise Exception("No ip found in range")
     hostaddr = free_ips[0]['hostaddr']
-
-    # Get domain of subnet
-    service = "/rest/ip_block_subnet_info"
-    params = {
-        "subnet_id": subnet_id
-    }
-    response = session.get(service, params=params)
-    subnet = response.json()[0]
-    class_parameters = utils.parse_class_parameters(subnet['subnet_class_parameters'])
-    domain = class_parameters.get('domain', [None])[0]
 
     # Allocate IP
     service = "/rest/ip_add"
