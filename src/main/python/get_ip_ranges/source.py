@@ -57,7 +57,7 @@ def do_get_ip_ranges(self, auth_credentials, cert):
         service = "/rest/ip_block_subnet_list"
         params = {}
         if subnet_site_name:
-            params = {"WHERE": "site_name='{}'".format(subnet_site_name)}
+            params = {"WHERE": "site_name='{}' and is_terminal='1'".format(subnet_site_name)}
 
         response = session.request("GET", service, params=params)
         subnets = response.json()
