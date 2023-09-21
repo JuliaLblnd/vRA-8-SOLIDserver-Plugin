@@ -78,27 +78,27 @@ def convert_pools_or_subnets(pools_or_subnets):
 
     for element in pools_or_subnets:
         class_parameters = utils.parse_class_parameters(element['subnet_class_parameters'])
+        subnetPrefixLength = utils.subnet_size2prefix_length(element["subnet_size"])
 
         # if key pool_name is present, it is a pool
         if "pool_name" in element:
             rangeId = "site:{}/subnet:{}/pool:{}".format(element["site_id"], element["subnet_id"], element["pool_id"])
             name = element["pool_name"]
-            vlan = class_parameters.get("vlmvlan_vlan_id", ["Not set"])[0]
-            description = "VLAN ID: {}".format(vlan)
+            subnetStart = utils.hex2ip(element["subnet_start_ip_addr"])
+            description = "Pool from subnet {}/{} ({})".format(subnetStart, subnetPrefixLength, element['subnet_name'])
             logging.info(f"Found pool {element['pool_name']} with ID {element['pool_id']}")
 
         # else, it is a block_subnet
         else:
             rangeId = "site:{}/subnet:{}".format(element["site_id"], element["subnet_id"])
             name = element["subnet_name"]
-            description = "VLAN {}, {}".format(element["vlmvlan_vlan_id"], element["vlmvlan_name"])
+            description = "Subnet {}/{}, VLAN {} ({})".format(subnetStart, subnetPrefixLength, element["vlmvlan_vlan_id"], element["vlmvlan_name"])
             logging.info(f"Found subnet {element['subnet_name']} with ID {element['subnet_id']}")
 
 
         domain             = class_parameters.get('domain', [None])[0]
         startIPAddress     = utils.hex2ip(element["start_ip_addr"])
         endIPAddress       = utils.hex2ip(element["end_ip_addr"])
-        subnetPrefixLength = utils.subnet_size2prefix_length(element["subnet_size"])
         gatewayAddress     = class_parameters.get('gateway', [None])[0]
         dnsSearchDomains   = class_parameters.get('domain_list', [""])[0].split(";")
         dnsServerAddresses = utils.parse_list(properties.get('dnsServerAddresses', ""))
