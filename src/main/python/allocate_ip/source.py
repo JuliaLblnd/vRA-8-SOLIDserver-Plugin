@@ -69,7 +69,7 @@ def allocate(resource, allocation, context, endpoint):
 def allocate_in_range(range_id, resource, allocation, context, endpoint):
 
     if int(allocation["size"]) != 1:
-        raise Exception("Not implemented")
+        raise Exception("Allocating more than one address is not implemented")
 
     range_id_parts = range_id.split("/")
     site_id   = range_id_parts[0].split(":", 1)[1]
