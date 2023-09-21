@@ -89,7 +89,7 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     # Get 1 free ip in pool or subnet
     service = "/rpc/ip_find_free_address"
     params = {
-        "max_find" : 1
+        "max_find" : 42
     }
     if is_pool:
         params["pool_id"] = range_id_parts[2].split(":", 1)[1]
@@ -115,25 +115,38 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
 
     hostaddr = free_ips[0]['hostaddr']
 
-    # Allocate IP
-    service = "/rest/ip_add"
-    params = {
-        "site_id"  : site_id,
-        "name"     : resource["name"] + ("." + domain if domain else ""),
-        "hostaddr" : hostaddr
-    }
-    response = session.request("POST", service, params=params)
-
-    logging.info(f"Allocated IP address {hostaddr} to {resource['name']} in subnet {subnet_id}")
-    logging.info(response.text)
-
     result = {
         "ipAllocationId": allocation["id"],
         "ipRangeId"     : range_id,
         "ipVersion"     : "IPv4",
-        "ipAddresses"   : [hostaddr],
+        "ipAddresses"   : None,
         "__site_id"     : site_id
     }
+
+    for free_ip in free_ips:
+        hostaddr = free_ip['hostaddr']
+
+        # Allocate IP
+        service = "/rest/ip_add"
+        params = {
+            "add_flag" : "new_only",
+            "site_id"  : site_id,
+            "name"     : resource["name"] + ("." + domain if domain else ""),
+            "hostaddr" : hostaddr
+        }
+        response = session.request("POST", service, params=params)
+
+        if response.status_code == 201:
+            # 201 Created
+            # [{"ret_oid":"6910"}]
+            logging.info(f"Allocated IP address {hostaddr} to {resource['name']} in subnet {subnet_id}")
+            logging.info(response.text)
+            result["ipAddresses"] = [hostaddr]
+            break
+
+    if result["ipAddresses"] == None:
+        logging.error(f"Failed to allocate IP address in range {range_id}")
+        raise Exception("Failed to allocate IP address")
 
     return result
 
