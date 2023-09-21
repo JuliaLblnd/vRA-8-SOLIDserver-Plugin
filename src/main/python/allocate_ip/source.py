@@ -100,10 +100,19 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
         params["begin_addr"] = allocation["start"]
 
     free_ip_response = session.request("OPTIONS", service, params=params)
-    free_ips = free_ip_response.json()
-    if len(free_ips) < 1:
+
+    if free_ip_response.status_code == 204:
+        logging.error("Range is full or do not exist in IPAM")
         logging.error(free_ip_response.text)
-        raise Exception("No ip found in range")
+        raise Exception("Range is full or do not exist in IPAM")
+
+    free_ips = free_ip_response.json()
+
+    if len(free_ips) < 1 or int(free_ips[0]['errno']) != 0 :
+        logging.error("Error retrieving free IP addresses in range")
+        logging.error(free_ip_response.text)
+        raise Exception("Error retrieving free IP addresses in range")
+
     hostaddr = free_ips[0]['hostaddr']
 
     # Allocate IP
