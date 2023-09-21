@@ -99,7 +99,7 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     if "start" in allocation.keys():
         params["begin_addr"] = allocation["start"]
 
-    free_ip_response = session.request("GET", service, params=params)
+    free_ip_response = session.request("OPTIONS", service, params=params)
     free_ips = free_ip_response.json()
     if len(free_ips) < 1:
         logging.error(free_ip_response.text)
