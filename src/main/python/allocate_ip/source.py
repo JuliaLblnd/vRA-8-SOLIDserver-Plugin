@@ -14,7 +14,7 @@ Implementation for EfficientIP SOLIDServer by Julia Leblond (JuliaLblnd)
 from vra_ipam_utils.ipam import IPAM
 import logging
 from vra_solidserver_utils import SOLIDserverSession
-from vra_solidserver_utils import utils
+from vra_solidserver_utils import parse_class_parameters
 
 def handler(context, inputs):
 
@@ -82,7 +82,7 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
     }
     response = session.request("GET", service, params=params)
     subnet = response.json()[0]
-    class_parameters = utils.parse_class_parameters(subnet['subnet_class_parameters'])
+    class_parameters = parse_class_parameters(subnet['subnet_class_parameters'])
     domain = class_parameters.get('domain', [None])[0]
 
     # Get 1 free ip in pool or subnet

@@ -8,5 +8,5 @@ vra_solidserver_utils
 
 __author__ = 'Julia Leblond'
 
-from . import utils
+from .utils import hex2ip, ip2hex, subnet_size2prefix_length, get_properties, parse_list, parse_class_parameters, parse_tags
 from .session import SOLIDserverSession
