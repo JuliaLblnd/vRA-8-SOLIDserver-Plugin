@@ -120,7 +120,7 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
         "ipRangeId"     : range_id,
         "ipVersion"     : "IPv4",
         "ipAddresses"   : None,
-        "__site_id"     : site_id
+        "__ip_id"     : None
     }
 
     for free_ip in free_ips:
@@ -139,12 +139,14 @@ def allocate_in_range(range_id, resource, allocation, context, endpoint):
         if response.status_code == 201:
             # 201 Created
             # [{"ret_oid":"6910"}]
-            logging.info(f"Allocated IP address {hostaddr} to {resource['name']} in subnet {subnet_id}")
+            ip_id = response.json()[0]["ret_oid"]
+            logging.info(f"Allocated IP address {hostaddr} (ip_id: {ip_id}) to {resource['name']} in subnet {subnet_id}")
             logging.info(response.text)
             result["ipAddresses"] = [hostaddr]
+            result["__ip_id"] = ip_id
             break
 
-    if result["ipAddresses"] == None:
+    if result["ipAddresses"] == None or result["__ip_id"] == None:
         logging.error(f"Failed to allocate IP address in range {range_id}")
         raise Exception("Failed to allocate IP address")
 
@@ -157,11 +159,10 @@ def rollback(allocation_result):
         ipAddresses = allocation.get("ipAddresses", None)
 
         service = "/rest/ip_delete"
-        params = {
-            "site_id" : allocation["__site_id"]
-        }
         for ipAddress in ipAddresses:
-            params["hostaddr"] = ipAddress
+            params = {
+                "ip_id" : allocation["__ip_id"]
+            }
             response = session.request("DELETE", service, params=params)
 
     return
