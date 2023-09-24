@@ -11,7 +11,6 @@ conditions of the subcomponent's license, as noted in the LICENSE file.
 Implementation for EfficientIP SOLIDServer by Julia Leblond (JuliaLblnd)
 """
 
-import requests
 from vra_ipam_utils.ipam import IPAM
 from vra_ipam_utils.exceptions import InvalidCertificateException
 import logging
