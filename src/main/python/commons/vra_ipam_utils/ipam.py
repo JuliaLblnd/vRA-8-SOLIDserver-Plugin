@@ -245,6 +245,9 @@ class IPAM(object):
 
     def _get_cert(self):
         inputs = self.inputs.get("endpoint", self.inputs)
+        if inputs["endpointProperties"].get("noVerifyCert", "false") == "true":
+            logging.warning("SSL certificate verification is disabled")
+            return False
         certificate = inputs["endpointProperties"].get("certificate", None)
         if certificate is not None:
             cert = tempfile.NamedTemporaryFile(mode='w', delete=False)

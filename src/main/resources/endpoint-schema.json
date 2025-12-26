@@ -21,6 +21,10 @@
                         "display":"textField"
                      },
                      {
+                        "id":"noVerifyCert",
+                        "display":"checkbox"
+                     },
+                     {
                         "id":"properties",
                         "display":"datagrid"
                      }
@@ -59,6 +63,13 @@
          "constraints":{
             "required":true
          }
+      },
+      "noVerifyCert":{
+         "type":{
+            "dataType":"boolean"
+         },
+         "label":"Ignore certificate",
+         "default":false
       },
       "properties":{
          "label":"Properties",
