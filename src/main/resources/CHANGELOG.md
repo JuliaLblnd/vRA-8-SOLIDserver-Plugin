@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.9.3 - 2025-12-30
+
+ - Add option to ignore certificate verification
+ - Use latest build of `photon:3.0` docker image for dependencies collection
+ - Set `project.build.sourceEncoding` to `UTF-8` to address warning from mvn
+
+## v0.9.2 - 2025-12-10
+
+ - Changed cert verification to False due to incompatibility with new certificate (temporary bugfix)
+
 ## v0.9.1 - 2023-10-13
 
  - Improve IP Allocation rollback by using `ip_id` instead of `site_id`
