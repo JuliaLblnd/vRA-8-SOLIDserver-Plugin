@@ -24,7 +24,7 @@ conditions of the subcomponent's license, as noted in the LICENSE file.
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <provider.name>EfficientIP-SOLIDserver</provider.name>
         <provider.description>EfficientIP SOLIDserver IPAM integration for vRA 8</provider.description>
-        <provider.version>0.9.1</provider.version>
+        <provider.version>0.9.3</provider.version>
 
         <provider.supportsAddressSpaces>false</provider.supportsAddressSpaces>
         <provider.supportsUpdateRecord>false</provider.supportsUpdateRecord>
