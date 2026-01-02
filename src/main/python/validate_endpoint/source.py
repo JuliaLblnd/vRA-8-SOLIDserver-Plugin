@@ -26,6 +26,10 @@ def handler(context, inputs):
 def do_validate_endpoint(self, auth_credentials, cert):
 
     hostname = self.inputs["endpointProperties"]["hostName"]
+
+    if self.inputs["endpointProperties"].get("certRetrust", "false") == "true":
+        raise InvalidCertificateException("Retrust fucking certificate!", hostname, 443)
+
     username = auth_credentials["privateKeyId"]
     password = auth_credentials["privateKey"]
     session = SOLIDserverSession(hostname, username, password, cert)
