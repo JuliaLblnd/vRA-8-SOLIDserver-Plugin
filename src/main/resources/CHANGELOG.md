@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.0 - 2026-01-02
+
+ - Add option to force certificate retrust
+ - Switched to `photon:4.0` docker image for dependencies collection
+ - **Warning:** Since the plug-in requires Photon 4.x as a extensibility action runtime in order to run on Python 3.10, the plug-in works only with versions of VMware Aria Automation 8.14.0 or later.
+ - **Warning:** Only tested with VMware Aria Automation 8.18. Due to photon image change, it may not be compatible with old version of Aria Automation 8.
+
 ## v0.9.3 - 2025-12-30
 
  - Add option to ignore certificate verification
