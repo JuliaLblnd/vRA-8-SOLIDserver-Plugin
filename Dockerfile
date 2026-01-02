@@ -1,4 +1,4 @@
-FROM photon:3.0
+FROM photon:4.0
 
 ADD target/python /ipam/python
 
