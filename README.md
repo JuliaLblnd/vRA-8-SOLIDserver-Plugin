@@ -17,10 +17,32 @@ Usage
 
 You must create IP *pools* in SOLIDserver IPAM.
 
-Additional Configuration Properties
------------------------------------
+Configuration parameters
+------------------------
 
-### `dnsServerAddresses` :
+## Force certificate retrust
+
+Use this option if the certificate of the endpoint has changed and you want to retrust it.
+
+To use this option : 
+ - check the option
+ - validate
+ - accept the new certificate at the first `Untrusted Certificate Found` prompt
+ - at the second `Untrusted Certificate Found` prompt, click Cancel
+ - uncheck the option
+ - validate again
+ - you are good
+
+## Ignore certificate
+
+Ignore the SSL certificate.
+
+This is equivalent to `verify=False` in Python Request.
+
+
+## Additional Properties
+
+### `dnsServerAddresses`
 
 DNS servers added to the network ranges.
 
@@ -32,7 +54,7 @@ Comma separated IPv4, not mandatory
 
 ### `pool_site_name`
 
-IPAM *Space* name to search pools in
+IPAM *Space* name to search pools in.
 
 Not mandatory
 
@@ -42,7 +64,7 @@ Not mandatory
 
 ### `subnet_site_name`
 
-IPAM *Space* name to search subnets in
+IPAM *Space* name to search subnets in.
 
 Not mandatory
 
