@@ -20,7 +20,7 @@ You must create IP *pools* in SOLIDserver IPAM.
 Configuration parameters
 ------------------------
 
-## Force certificate retrust
+### Force certificate retrust
 
 Use this option if the certificate of the endpoint has changed and you want to retrust it.
 
@@ -33,14 +33,14 @@ To use this option :
  - validate again
  - you are good
 
-## Ignore certificate
+### Ignore certificate
 
 Ignore the SSL certificate.
 
 This is equivalent to `verify=False` in Python Request.
 
-
-## Additional Properties
+Additional Properties
+---------------------
 
 ### `dnsServerAddresses`
 
