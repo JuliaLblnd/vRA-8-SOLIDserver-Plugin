@@ -1,14 +1,14 @@
-EfficientIP SOLIDserver integration for vRA 8
-=============================================
+EfficientIP SOLIDserver integration for VMware Aria Automation
+==============================================================
 
-A plugin to integrate [EfficientIP's SOLIDserver](https://www.efficientip.com/products/solidserver/) IPAM with vRealize Automation 8.x and Cloud.
+A plugin to integrate [EfficientIP's SOLIDserver](https://www.efficientip.com/products/solidserver/) IPAM with VMware Aria Automation.
 
 ![Screenshot](./screenshot.png)
 
 Installation
 ------------
 
- - Add a new IPAM Integration in vRealize Automation
+ - Add a new IPAM Integration in Aria Automation
  - Upload the [latest release](https://github.com/JuliaLblnd/vRA-8-SOLIDserver-Plugin/releases/latest) to IPAM Providers
  - Provide the **Username**, **Password**, and **Hostname** of your SOLIDserver Appliances
 
